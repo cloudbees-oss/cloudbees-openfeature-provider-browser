@@ -47,7 +47,7 @@
     "dist/"
   ],
   "dependencies": {
-    "jest-environment-jsdom": "^29.0.3",
+    "jest-environment-jsdom": "^30.0.5",
     "rox-browser": "^6.0.2"
   },
   "peerDependencies": {
