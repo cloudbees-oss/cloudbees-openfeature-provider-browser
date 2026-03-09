@@ -51,10 +51,12 @@
     "rox-browser": "^6.0.2"
   },
   "peerDependencies": {
-    "@openfeature/js-sdk": "^1.0.0"
+    "@openfeature/core": "^1.9.2",
+    "@openfeature/web-sdk": "^1.0.0"
   },
   "devDependencies": {
-    "@openfeature/js-sdk": "^1.0.0",
+    "@openfeature/core": "^1.9.2",
+    "@openfeature/web-sdk": "^1.0.0",
     "@types/jest": "^28.1.4",
     "@types/node": "^18.7.16",
     "@types/rox-browser": "^5.0.2",

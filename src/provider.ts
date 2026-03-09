@@ -1,4 +1,4 @@
-import {EvaluationContext, InvalidContextError, JsonValue, Provider, ResolutionDetails} from '@openfeature/js-sdk'
+import {EvaluationContext, InvalidContextError, JsonValue, Logger, Provider, ResolutionDetails} from '@openfeature/web-sdk'
 import Rox, {RoxSetupOptions} from 'rox-browser'
 
 /**
@@ -16,24 +16,28 @@ export class CloudbeesProvider implements Provider {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {} // Rox.setup is async. Force the use of the build method to asynchronously construct the provider.
 
+  readonly runsOn = 'client' as const;
   readonly metadata = {
     name: 'CloudBees Feature Management Provider',
   } as const;
 
-  resolveBooleanEvaluation(flagKey: string, defaultValue: boolean, context: EvaluationContext): Promise<ResolutionDetails<boolean>> {
-    return Promise.resolve({value: Rox.dynamicApi.isEnabled(flagKey, defaultValue, context)})
-  }
-
-  resolveStringEvaluation(flagKey: string, defaultValue: string, context: EvaluationContext): Promise<ResolutionDetails<string>> {
-    return Promise.resolve({value: Rox.dynamicApi.value(flagKey, defaultValue, context)})
-  }
-
-  resolveNumberEvaluation(flagKey: string, defaultValue: number, context: EvaluationContext): Promise<ResolutionDetails<number>> {
-    return Promise.resolve({value: Rox.dynamicApi.getNumber(flagKey, defaultValue, context)})
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  resolveBooleanEvaluation(flagKey: string, defaultValue: boolean, context: EvaluationContext, logger: Logger): ResolutionDetails<boolean> {
+    return {value: Rox.dynamicApi.isEnabled(flagKey, defaultValue, context)}
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  resolveObjectEvaluation<T extends JsonValue>(flagKey: string, defaultValue: T, context: EvaluationContext): Promise<ResolutionDetails<T>> {
-    return Promise.reject(new InvalidContextError('Not implemented - CloudBees feature management does not support an object type. Only String, Number and Boolean'))
+  resolveStringEvaluation(flagKey: string, defaultValue: string, context: EvaluationContext, logger: Logger): ResolutionDetails<string> {
+    return {value: Rox.dynamicApi.value(flagKey, defaultValue, context)}
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  resolveNumberEvaluation(flagKey: string, defaultValue: number, context: EvaluationContext, logger: Logger): ResolutionDetails<number> {
+    return {value: Rox.dynamicApi.getNumber(flagKey, defaultValue, context)}
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  resolveObjectEvaluation<T extends JsonValue>(flagKey: string, defaultValue: T, context: EvaluationContext, logger: Logger): ResolutionDetails<T> {
+    throw new InvalidContextError('Not implemented - CloudBees feature management does not support an object type. Only String, Number and Boolean')
   }
 }

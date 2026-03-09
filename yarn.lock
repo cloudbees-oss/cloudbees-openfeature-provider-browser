@@ -660,10 +660,15 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@openfeature/js-sdk@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@openfeature/js-sdk/-/js-sdk-1.0.0.tgz#d3482390a8f9c80ef1cd3553dfbd3ccfc43092d3"
-  integrity sha512-kVFMgMk2xo4cH2tdiGn0ZjsE4BqtgJ2+U0nTNzYiTPp3B31qzca2QB9FDyw4z+dlWTJi5mhKc6sIlL8ON9nuTw==
+"@openfeature/core@^1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@openfeature/core/-/core-1.9.2.tgz#ec49e1e0e5d6bd5bf9b13f63ea5e410f7bc823e0"
+  integrity sha512-0lX0xYTflLrjiYNlareYmdV98xEddR5+PhcuoGvH+BMIqpZ2icAC7us9Uv86KRVqofXvpAUwpP32wgqmtUFs8Q==
+
+"@openfeature/web-sdk@^1.0.0":
+  version "1.7.3"
+  resolved "https://registry.yarnpkg.com/@openfeature/web-sdk/-/web-sdk-1.7.3.tgz#e7e4b5735621cb1441ab18c00b6d506f749cc399"
+  integrity sha512-WrerPh3KwtpyNGHtWfWgbBnIv3iyOimnsljXJnx2UMcFzQNmj3xgsUZRvE/gAb+BTgz22+kvks1EXA/DJRmhpg==
 
 "@sinclair/typebox@^0.24.1":
   version "0.24.38"
