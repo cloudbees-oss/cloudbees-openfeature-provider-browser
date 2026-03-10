@@ -1,5 +1,5 @@
 import {CloudbeesProvider} from '../src'
-import {Client, OpenFeature} from '@openfeature/js-sdk'
+import {Client, OpenFeature} from '@openfeature/web-sdk'
 
 describe('Cloudbees Provider', () => {
   it('invalid creation', async () => {
@@ -16,65 +16,78 @@ describe('Cloudbees Provider', () => {
     })
 
     describe('boolean flags', () => {
-      it('with targeting on', async () => {
-        await expect(client.getBooleanValue('boolean-static-true', false)).resolves.toBe(true)
-        await expect(client.getBooleanValue('boolean-static-false', true)).resolves.toBe(false)
+      it('with targeting on', () => {
+        expect(client.getBooleanValue('boolean-static-true', false)).toBe(true)
+        expect(client.getBooleanValue('boolean-static-false', true)).toBe(false)
       })
 
-      it('with targeting off', async () => {
-        await expect(client.getBooleanValue('boolean-disabled', false)).resolves.toBe(false)
-        await expect(client.getBooleanValue('boolean-disabled', true)).resolves.toBe(true)
+      it('with targeting off', () => {
+        expect(client.getBooleanValue('boolean-disabled', false)).toBe(false)
+        expect(client.getBooleanValue('boolean-disabled', true)).toBe(true)
       })
 
       it('using a context', async () => {
-        await expect(client.getBooleanValue('boolean-with-context', false, {stringproperty: 'on'})).resolves.toBe(true)
-        await expect(client.getBooleanValue('boolean-with-context', false, {stringproperty: 'off'})).resolves.toBe(false)
+        await OpenFeature.setContext({stringproperty: 'on'})
+        expect(client.getBooleanValue('boolean-with-context', false)).toBe(true)
+        await OpenFeature.setContext({stringproperty: 'off'})
+        expect(client.getBooleanValue('boolean-with-context', false)).toBe(false)
       })
     })
 
     describe('string flags', () => {
-      it('with targeting on', async () => {
-        await expect(client.getStringValue('string-static-yes', 'default')).resolves.toBe('yes')
-        await expect(client.getStringValue('string-static-no', 'default')).resolves.toBe('no')
+      it('with targeting on', () => {
+        expect(client.getStringValue('string-static-yes', 'default')).toBe('yes')
+        expect(client.getStringValue('string-static-no', 'default')).toBe('no')
       })
 
-      it('with targeting off', async () => {
-        await expect(client.getStringValue('string-disabled', 'banana')).resolves.toBe('banana')
+      it('with targeting off', () => {
+        expect(client.getStringValue('string-disabled', 'banana')).toBe('banana')
       })
 
       it('using a context', async () => {
-        await expect(client.getStringValue('string-with-context', 'default', {stringproperty: 'on'})).resolves.toBe('yes')
-        await expect(client.getStringValue('string-with-context', 'default', {stringproperty: 'off'})).resolves.toBe('no')
-        await expect(client.getStringValue('string-with-context', 'default', {not_defined: 'whatever'})).resolves.toBe('not specified')
-        await expect(client.getStringValue('string-with-context', 'default', {})).resolves.toBe('not specified')
-        await expect(client.getStringValue('string-with-context', 'default')).resolves.toBe('not specified')
+        await OpenFeature.setContext({stringproperty: 'on'})
+        expect(client.getStringValue('string-with-context', 'default')).toBe('yes')
+        await OpenFeature.setContext({stringproperty: 'off'})
+        expect(client.getStringValue('string-with-context', 'default')).toBe('no')
+        await OpenFeature.setContext({not_defined: 'whatever'})
+        expect(client.getStringValue('string-with-context', 'default')).toBe('not specified')
+        await OpenFeature.setContext({})
+        expect(client.getStringValue('string-with-context', 'default')).toBe('not specified')
+        await OpenFeature.clearContexts()
+        expect(client.getStringValue('string-with-context', 'default')).toBe('not specified')
       })
     })
 
     describe('number flags', () => {
-      it('with targeting on', async () => {
-        await expect(client.getNumberValue('string-static-5', 5)).resolves.toBe(5)
+      it('with targeting on', () => {
+        expect(client.getNumberValue('string-static-5', 5)).toBe(5)
       })
 
-      it('with targeting off', async () => {
-        await expect(client.getNumberValue('string-disabled', 7)).resolves.toBe(7)
+      it('with targeting off', () => {
+        expect(client.getNumberValue('string-disabled', 7)).toBe(7)
       })
 
       it('using a context', async () => {
-        await expect(client.getNumberValue('integer-with-context', -1, {stringproperty: '1'})).resolves.toBe(1)
-        await expect(client.getNumberValue('integer-with-context', -1, {stringproperty: '5'})).resolves.toBe(5)
-        await expect(client.getNumberValue('integer-with-context', -1, {not_defined: 'whatever'})).resolves.toBe(10)
-        await expect(client.getNumberValue('integer-with-context', -1, {})).resolves.toBe(10)
-        await expect(client.getNumberValue('integer-with-context', -1)).resolves.toBe(10)
+        await OpenFeature.setContext({stringproperty: '1'})
+        expect(client.getNumberValue('integer-with-context', -1)).toBe(1)
+        await OpenFeature.setContext({stringproperty: '5'})
+        expect(client.getNumberValue('integer-with-context', -1)).toBe(5)
+        await OpenFeature.setContext({not_defined: 'whatever'})
+        expect(client.getNumberValue('integer-with-context', -1)).toBe(10)
+        await OpenFeature.setContext({})
+        expect(client.getNumberValue('integer-with-context', -1)).toBe(10)
+        await OpenFeature.clearContexts()
+        expect(client.getNumberValue('integer-with-context', -1)).toBe(10)
       })
     })
 
     describe('object flags', () => {
-      it('test we do not support these types of flag', async () => {
-        await expect(client.getObjectDetails('not-supported', {a: 'b'})).resolves.toEqual({
+      it('test we do not support these types of flag', () => {
+        expect(client.getObjectDetails('not-supported', {a: 'b'})).toEqual({
           errorCode: 'INVALID_CONTEXT',
           errorMessage: 'Not implemented - CloudBees feature management does not support an object type. Only String, Number and Boolean',
           flagKey: 'not-supported',
+          flagMetadata: {},
           reason: 'ERROR',
           value: {a: 'b'},
         })
@@ -84,21 +97,31 @@ describe('Cloudbees Provider', () => {
     describe('flags with differently typed context values', () => {
       it('positive matches for supported types (string/number/boolean)', async () => {
         // // Test positive matches for supported types (string/number/boolean)
-        await expect(client.getNumberValue('integer-with-complex-context', -1, {stringproperty: 'one'})).resolves.toBe(1)
-        await expect(client.getNumberValue('integer-with-complex-context', -1, {numberproperty: 1})).resolves.toBe(1)
-        await expect(client.getNumberValue('integer-with-complex-context', -1, {booleanproperty: true})).resolves.toBe(1)
+        await OpenFeature.setContext({stringproperty: 'one'})
+        expect(client.getNumberValue('integer-with-complex-context', -1)).toBe(1)
+        await OpenFeature.setContext({numberproperty: 1})
+        expect(client.getNumberValue('integer-with-complex-context', -1)).toBe(1)
+        await OpenFeature.setContext({booleanproperty: true})
+        expect(client.getNumberValue('integer-with-complex-context', -1)).toBe(1)
       })
 
       it('negative matches for supported types (string/number/boolean) - it should serve the default value', async () => {
-        await expect(client.getNumberValue('integer-with-complex-context', -1, {stringproperty: 'no'})).resolves.toBe(-1)
-        await expect(client.getNumberValue('integer-with-complex-context', -1, {numberproperty: 0})).resolves.toBe(-1)
-        await expect(client.getNumberValue('integer-with-complex-context', -1, {booleanproperty: false})).resolves.toBe(-1)
+        await OpenFeature.setContext({stringproperty: 'no'})
+        expect(client.getNumberValue('integer-with-complex-context', -1)).toBe(-1)
+        await OpenFeature.setContext({numberproperty: 0})
+        expect(client.getNumberValue('integer-with-complex-context', -1)).toBe(-1)
+        await OpenFeature.setContext({booleanproperty: false})
+        expect(client.getNumberValue('integer-with-complex-context', -1)).toBe(-1)
 
         // Unexpected/unsupported contexts
-        await expect(client.getNumberValue('integer-with-complex-context', -1, {badproperty: 'whatever'})).resolves.toBe(-1)
-        await expect(client.getNumberValue('integer-with-complex-context', -1, {stringproperty: []})).resolves.toBe(-1)
-        await expect(client.getNumberValue('integer-with-complex-context', -1, {stringproperty: {}})).resolves.toBe(-1)
-        await expect(client.getNumberValue('integer-with-complex-context', -1, {stringproperty: 1})).resolves.toBe(-1)
+        await OpenFeature.setContext({badproperty: 'whatever'})
+        expect(client.getNumberValue('integer-with-complex-context', -1)).toBe(-1)
+        await OpenFeature.setContext({stringproperty: []})
+        expect(client.getNumberValue('integer-with-complex-context', -1)).toBe(-1)
+        await OpenFeature.setContext({stringproperty: {}})
+        expect(client.getNumberValue('integer-with-complex-context', -1)).toBe(-1)
+        await OpenFeature.setContext({stringproperty: 1})
+        expect(client.getNumberValue('integer-with-complex-context', -1)).toBe(-1)
       })
     })
   })

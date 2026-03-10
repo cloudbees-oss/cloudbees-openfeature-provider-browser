@@ -109,3 +109,9 @@ dist
 
 # test results
 junit.xml
+
+# Project documentation/memory files 
+../docs/
+
+# Example application (local development only)
+example/
