@@ -51,7 +51,7 @@ pipeline {
               # can we get this from the above without rebuilding?
               yarn --frozen-lockfile
               yarn build
-              yarn publish
+              npm publish
             """, label: "publish to npmjs.org"
           }
         } //end container
