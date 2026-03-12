@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/cloudbees-oss/cloudbees-openfeature-provider-browser/compare/v1.1.0...v1.2.0) (2026-03-12)
+
+
+### Features
+
+* fix: use npm publish instead of yarn ([89ee6de](https://github.com/cloudbees-oss/cloudbees-openfeature-provider-browser/commit/89ee6de26358904fda62f0928644b43047965e40))
+
 ## [1.1.0](https://github.com/cloudbees-oss/cloudbees-openfeature-provider-browser/compare/v1.0.1...v1.1.0) (2026-03-12)
 
 
