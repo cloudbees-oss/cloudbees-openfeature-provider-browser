@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/cloudbees-oss/cloudbees-openfeature-provider-browser/compare/v1.0.1...v1.1.0) (2026-03-12)
+
+
+### Features
+
+* migrate to OpenFeature Web SDK v1.0.0 ([13d9775](https://github.com/cloudbees-oss/cloudbees-openfeature-provider-browser/commit/13d97754d39e5f4326ee5614abfe157a691038d7))
+
 ## [1.0.1](https://github.com/rollout/cloudbees-openfeature-provider-browser/compare/v1.0.0...v1.0.1) (2025-06-04)
 
 
